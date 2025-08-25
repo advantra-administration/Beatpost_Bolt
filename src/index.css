@@ -589,6 +589,230 @@
   padding: 0 20px;
 }
 
+/* Ranking Page Styles */
+.ranking-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  font-family: 'Crimson Text', Georgia, serif;
+  padding: 0 20px;
+}
+
+.ranking-content {
+  padding: 30px 0;
+}
+
+.ranking-header {
+  margin-bottom: 30px;
+}
+
+.ranking-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  font-family: 'Source Serif Pro', serif;
+}
+
+.ranking-description {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Hashtag Filters */
+.ranking-hashtags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.ranking-hashtag-btn {
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ranking-hashtag-btn:hover,
+.ranking-hashtag-btn.active {
+  background: #333;
+  color: white;
+  border-color: #333;
+}
+
+.ranking-hashtag-search {
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #8B1538;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #8B1538;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.ranking-hashtag-search:hover {
+  background: #8B1538;
+  color: white;
+}
+
+/* Sort Controls */
+.ranking-controls {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.ranking-sort-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ranking-sort-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.ranking-sort-dropdown {
+  position: relative;
+}
+
+.ranking-sort-btn {
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-width: 120px;
+  justify-content: space-between;
+}
+
+.ranking-sort-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 10;
+}
+
+.ranking-sort-menu button {
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.ranking-sort-menu button:hover {
+  background: #f5f5f5;
+}
+
+/* Articles List */
+.ranking-articles {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.ranking-article {
+  display: grid;
+  grid-template-columns: 60px 120px 1fr;
+  gap: 20px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  align-items: start;
+}
+
+.ranking-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #8B1538;
+  font-family: 'Source Serif Pro', serif;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.ranking-article-image {
+  width: 120px;
+  height: 90px;
+  overflow: hidden;
+}
+
+.ranking-article-content {
+  flex: 1;
+}
+
+.ranking-article-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.3;
+  font-family: 'Source Serif Pro', serif;
+}
+
+.ranking-article-excerpt {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.ranking-article-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ranking-article-author {
+  font-size: 12px;
+  color: #8B1538;
+  font-style: italic;
+}
+
+.ranking-article-stats {
+  display: flex;
+  gap: 15px;
+}
+
+.ranking-stat {
+  font-size: 11px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ranking-article {
+    grid-template-columns: 40px 80px 1fr;
+    gap: 15px;
+  }
+  
+  .ranking-number {
 /* Header Top Section */
 .newspaper-header-top {
   display: flex;
@@ -822,7 +1046,6 @@
 .newspaper-secondary-image {
   width: 120px;
   height: 90px;
-  flex-shrink: 0;
   overflow: hidden;
 }
 
@@ -1058,4 +1281,264 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+}
+/* RANKING PAGE STYLES - Exact match to image */
+.ranking-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  font-family: 'Crimson Text', Georgia, serif;
+  padding: 0 20px;
+}
+
+.ranking-main-content {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+/* Header Section */
+.ranking-header-section {
+  margin-bottom: 30px;
+}
+
+.ranking-main-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+  font-family: 'Source Serif Pro', serif;
+}
+
+.ranking-main-description {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Hashtag Filters */
+.ranking-hashtag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.ranking-hashtag-pill {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Crimson Text', serif;
+}
+
+.ranking-hashtag-pill:hover {
+  background: #555;
+}
+
+.ranking-hashtag-pill.active {
+  background: #8B1538;
+}
+
+.ranking-hashtag-search-btn {
+  background: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  font-family: 'Crimson Text', serif;
+}
+
+.ranking-hashtag-search-btn:hover {
+  border-color: #8B1538;
+  color: #8B1538;
+}
+
+/* Sort Controls */
+.ranking-sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  font-size: 14px;
+  color: #666;
+}
+
+.ranking-sort-text {
+  font-size: 14px;
+  color: #666;
+}
+
+.ranking-sort-dropdown-container {
+  position: relative;
+}
+
+.ranking-sort-dropdown-btn {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-family: 'Crimson Text', serif;
+}
+
+.ranking-sort-dropdown-btn:hover {
+  border-color: #8B1538;
+}
+
+.ranking-sort-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 10;
+  min-width: 150px;
+}
+
+.ranking-sort-dropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  font-family: 'Crimson Text', serif;
+}
+
+.ranking-sort-dropdown-menu button:hover {
+  background: #f5f5f5;
+}
+
+/* Articles List */
+.ranking-articles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.ranking-article-item {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #eee;
+}
+
+.ranking-article-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #8B1538;
+  min-width: 40px;
+  font-family: 'Source Serif Pro', serif;
+}
+
+.ranking-article-image-container {
+  width: 120px;
+  height: 90px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ranking-article-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%) contrast(1.1);
+}
+
+.ranking-article-details {
+  flex: 1;
+}
+
+.ranking-article-item-title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #333;
+  margin-bottom: 8px;
+  font-family: 'Source Serif Pro', serif;
+}
+
+.ranking-article-item-excerpt {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.ranking-article-item-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ranking-article-author-name {
+  font-size: 13px;
+  color: #8B1538;
+  font-style: italic;
+}
+
+.ranking-article-stats-row {
+  display: flex;
+  gap: 15px;
+  font-size: 12px;
+  color: #999;
+}
+
+.ranking-article-stat {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ranking-main-content {
+    padding: 0 10px;
+  }
+  
+  .ranking-article-item {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .ranking-article-image-container {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .ranking-hashtag-filters {
+    gap: 8px;
+  }
+  
+  .ranking-hashtag-pill,
+  .ranking-hashtag-search-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .ranking-sort-controls {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }

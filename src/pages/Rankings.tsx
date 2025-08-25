@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { postService, hashtagService, Post } from '../services/api';
-import { Search, ChevronDown } from 'lucide-react';
+import { Search, ChevronDown, Moon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Rankings: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [posts, setPosts] = useState<Post[]>([]);
-  const [hashtags, setHashtags] = useState<{ hashtag: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedHashtag, setSelectedHashtag] = useState<string>(searchParams.get('hashtag') || '');
   const [sortBy, setSortBy] = useState('Most highest');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
-  // Mock data for exact replication
+  // Mock data matching the image exactly
   const mockPosts = [
     {
       id: '1',
@@ -127,10 +126,6 @@ const Rankings: React.FC = () => {
     }
   ];
 
-  const mockHashtags = [
-    'science', 'literature', 'tech', 'philosophy', 'gastronomy', 'bioethics'
-  ];
-
   useEffect(() => {
     // Simulate loading
     setTimeout(() => {
@@ -192,6 +187,9 @@ const Rankings: React.FC = () => {
           <Link to="/autores" className="newspaper-nav-item">Authors</Link>
         </div>
         <div className="newspaper-nav-right">
+          <button className="newspaper-nav-icon">
+            <Moon className="w-4 h-4" />
+          </button>
           <span className="newspaper-nav-text">LOGIN</span>
           <button className="newspaper-nav-icon">
             <Search className="w-4 h-4" />
@@ -200,115 +198,113 @@ const Rankings: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="ranking-content">
+      <div className="ranking-main-content">
         {/* Title and Description */}
-        <div className="ranking-header">
-          <h1 className="ranking-title">Top Articles by Hashtag</h1>
-          <p className="ranking-description">
+        <div className="ranking-header-section">
+          <h1 className="ranking-main-title">Top Articles by Hashtag</h1>
+          <p className="ranking-main-description">
             Explore the most visited, rated, and discussed articles in each category.
           </p>
         </div>
 
         {/* Hashtag Filters */}
-        <div className="ranking-hashtags">
+        <div className="ranking-hashtag-filters">
           <button 
-            className={`ranking-hashtag-btn ${!selectedHashtag ? 'active' : ''}`}
-            onClick={() => handleHashtagClick('')}
+            className={`ranking-hashtag-pill ${selectedHashtag === 'science' ? 'active' : ''}`}
+            onClick={() => handleHashtagClick('science')}
           >
             science
           </button>
           <button 
-            className={`ranking-hashtag-btn ${selectedHashtag === 'literature' ? 'active' : ''}`}
+            className={`ranking-hashtag-pill ${selectedHashtag === 'literature' ? 'active' : ''}`}
             onClick={() => handleHashtagClick('literature')}
           >
             literature
           </button>
           <button 
-            className={`ranking-hashtag-btn ${selectedHashtag === 'tech' ? 'active' : ''}`}
+            className={`ranking-hashtag-pill ${selectedHashtag === 'tech' ? 'active' : ''}`}
             onClick={() => handleHashtagClick('tech')}
           >
             tech
           </button>
           <button 
-            className={`ranking-hashtag-btn ${selectedHashtag === 'philosophy' ? 'active' : ''}`}
+            className={`ranking-hashtag-pill ${selectedHashtag === 'philosophy' ? 'active' : ''}`}
             onClick={() => handleHashtagClick('philosophy')}
           >
             philosophy
           </button>
           <button 
-            className={`ranking-hashtag-btn ${selectedHashtag === 'gastronomy' ? 'active' : ''}`}
+            className={`ranking-hashtag-pill ${selectedHashtag === 'gastronomy' ? 'active' : ''}`}
             onClick={() => handleHashtagClick('gastronomy')}
           >
             gastronomy
           </button>
           <button 
-            className={`ranking-hashtag-btn ${selectedHashtag === 'bioethics' ? 'active' : ''}`}
+            className={`ranking-hashtag-pill ${selectedHashtag === 'bioethics' ? 'active' : ''}`}
             onClick={() => handleHashtagClick('bioethics')}
           >
             bioethics
           </button>
-          <button className="ranking-hashtag-search">
+          <button className="ranking-hashtag-search-btn">
             <Search className="w-4 h-4 mr-1" />
             Search for more hashtags
           </button>
         </div>
 
         {/* Sort Controls */}
-        <div className="ranking-controls">
-          <div className="ranking-sort-section">
-            <span className="ranking-sort-label">Sort by:</span>
-            <div className="ranking-sort-dropdown">
-              <button 
-                className="ranking-sort-btn"
-                onClick={() => setShowSortDropdown(!showSortDropdown)}
-              >
-                {sortBy}
-                <ChevronDown className="w-4 h-4 ml-1" />
-              </button>
-              {showSortDropdown && (
-                <div className="ranking-sort-menu">
-                  <button onClick={() => handleSortChange('Most highest')}>Most highest</button>
-                  <button onClick={() => handleSortChange('Most visited')}>Most visited</button>
-                  <button onClick={() => handleSortChange('Most recent')}>Most recent</button>
-                </div>
-              )}
-            </div>
-            <span className="ranking-sort-label">Most highest</span>
-            <span className="ranking-sort-label">For last</span>
+        <div className="ranking-sort-controls">
+          <span className="ranking-sort-text">Sort by:</span>
+          <div className="ranking-sort-dropdown-container">
+            <button 
+              className="ranking-sort-dropdown-btn"
+              onClick={() => setShowSortDropdown(!showSortDropdown)}
+            >
+              Most highest
+              <ChevronDown className="w-4 h-4 ml-1" />
+            </button>
+            {showSortDropdown && (
+              <div className="ranking-sort-dropdown-menu">
+                <button onClick={() => handleSortChange('Most highest')}>Most highest</button>
+                <button onClick={() => handleSortChange('Most visited')}>Most visited</button>
+                <button onClick={() => handleSortChange('Most recent')}>Most recent</button>
+              </div>
+            )}
           </div>
+          <span className="ranking-sort-text">Most highest</span>
+          <span className="ranking-sort-text">For last</span>
         </div>
 
         {/* Articles List */}
-        <div className="ranking-articles">
+        <div className="ranking-articles-list">
           {posts.map((post, index) => (
-            <div key={post.id} className="ranking-article">
-              <div className="ranking-number">
+            <div key={post.id} className="ranking-article-item">
+              <div className="ranking-article-number">
                 #{index + 1}
               </div>
               
-              <div className="ranking-article-image">
+              <div className="ranking-article-image-container">
                 <img 
                   src={post.image} 
                   alt=""
-                  className="newspaper-image"
+                  className="ranking-article-image"
                 />
               </div>
               
-              <div className="ranking-article-content">
-                <h3 className="ranking-article-title">
+              <div className="ranking-article-details">
+                <h3 className="ranking-article-item-title">
                   {post.title}
                 </h3>
-                <p className="ranking-article-excerpt">
+                <p className="ranking-article-item-excerpt">
                   {post.content}
                 </p>
-                <div className="ranking-article-meta">
-                  <span className="ranking-article-author">
+                <div className="ranking-article-item-meta">
+                  <span className="ranking-article-author-name">
                     By {post.author_username}
                   </span>
-                  <div className="ranking-article-stats">
-                    <span className="ranking-stat">👁 {post.visits.toLocaleString()}</span>
-                    <span className="ranking-stat">💬 {post.comments_count} Comments</span>
-                    <span className="ranking-stat">⭐ {post.average_rating}</span>
+                  <div className="ranking-article-stats-row">
+                    <span className="ranking-article-stat">👁 {post.visits.toLocaleString()}</span>
+                    <span className="ranking-article-stat">💬 {post.comments_count} Comments</span>
+                    <span className="ranking-article-stat">⭐ {post.average_rating}</span>
                   </div>
                 </div>
               </div>
