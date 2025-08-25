@@ -61,6 +61,44 @@ const Frontpage: React.FC = () => {
 
   return (
     <div className="newspaper-page">
+      {/* Header with date and login */}
+      <div className="newspaper-header-top">
+        <div className="newspaper-date-left">
+          Wednesday, August 8, 2024
+        </div>
+        <div className="newspaper-login-right">
+          <Link to="/login" className="newspaper-login-link">Log In</Link>
+          <span className="mx-2">|</span>
+          <Link to="/register" className="newspaper-login-link">Get Started</Link>
+        </div>
+      </div>
+
+      {/* Logo */}
+      <div className="newspaper-logo-section">
+        <div className="newspaper-logo">
+          <div className="newspaper-logo-icon">B</div>
+          <span className="newspaper-logo-text">Beatpost</span>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="newspaper-nav">
+        <div className="newspaper-nav-left">
+          <Link to="/" className="newspaper-nav-item active">Home</Link>
+          <Link to="/ranks" className="newspaper-nav-item">Ranking</Link>
+          <Link to="/autores" className="newspaper-nav-item">Authors</Link>
+        </div>
+        <div className="newspaper-nav-right">
+          <button className="newspaper-nav-icon">
+            <Moon className="w-4 h-4" />
+          </button>
+          <span className="newspaper-nav-text">Get Started</span>
+          <button className="newspaper-nav-icon">
+            <Search className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="newspaper-main-layout">
         {/* Left Content */}

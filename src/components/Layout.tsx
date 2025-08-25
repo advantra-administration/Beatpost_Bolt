@@ -28,6 +28,159 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-newspaper-50">
+      {/* Header */}
+      <header className="beat-header">
+        <div className="beat-container">
+          <div className="flex items-center justify-between py-4">
+            {/* Logo */}
+            <Link to="/" className="beat-logo flex items-center space-x-2">
+              <BookOpen className="w-8 h-8" />
+              <span className="text-2xl font-bold">Beatpost</span>
+            </Link>
+
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link 
+                to="/" 
+                className={`beat-nav-link flex items-center space-x-1 ${isActive('/') ? 'active' : ''}`}
+              >
+                <Home className="w-4 h-4" />
+                <span>Home</span>
+              </Link>
+              
+              <Link 
+                to="/ranks" 
+                className={`beat-nav-link flex items-center space-x-1 ${isActive('/ranks') ? 'active' : ''}`}
+              >
+                <TrendingUp className="w-4 h-4" />
+                <span>Ranking</span>
+              </Link>
+
+              <Link 
+                to="/autores" 
+                className={`beat-nav-link flex items-center space-x-1 ${isActive('/autores') ? 'active' : ''}`}
+              >
+                <Users className="w-4 h-4" />
+                <span>Autores</span>
+              </Link>
+
+              {user && (
+                <Link 
+                  to="/escribir" 
+                  className={`beat-nav-link flex items-center space-x-1 ${isActive('/escribir') ? 'active' : ''}`}
+                >
+                  <PenTool className="w-4 h-4" />
+                  <span>Escribir</span>
+                </Link>
+              )}
+            </nav>
+
+            {/* User Menu */}
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <div className="flex items-center space-x-4">
+                  <Link 
+                    to="/perfil" 
+                    className="beat-nav-link flex items-center space-x-2"
+                  >
+                    <User className="w-4 h-4" />
+                    <span className="hidden md:inline">{user.username}</span>
+                    <span className="beat-mojo ml-2">
+                      {Math.round(user.mojo)} Mojo
+                    </span>
+                  </Link>
+                  
+                  <button 
+                    onClick={logout}
+                    className="beat-nav-link flex items-center space-x-1 text-red-600 hover:text-red-700"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="hidden md:inline">Salir</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-4">
+                  <Link 
+                    to="/login" 
+                    className="beat-nav-link flex items-center space-x-1"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    <span>Entrar</span>
+                  </Link>
+                  
+                  <Link 
+                    to="/register" 
+                    className="beat-button flex items-center space-x-1"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span>Registro</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Navigation */}
+      <nav className="md:hidden bg-white border-b border-newspaper-300">
+        <div className="beat-container">
+          <div className="flex items-center justify-around py-3">
+            <Link 
+              to="/" 
+              className={`beat-nav-link flex flex-col items-center space-y-1 ${isActive('/') ? 'active' : ''}`}
+            >
+              <Home className="w-5 h-5" />
+              <span className="text-xs">Home</span>
+            </Link>
+            
+            <Link 
+              to="/ranks" 
+              className={`beat-nav-link flex flex-col items-center space-y-1 ${isActive('/ranks') ? 'active' : ''}`}
+            >
+              <TrendingUp className="w-5 h-5" />
+              <span className="text-xs">Ranking</span>
+            </Link>
+
+            <Link 
+              to="/autores" 
+              className={`beat-nav-link flex flex-col items-center space-y-1 ${isActive('/autores') ? 'active' : ''}`}
+            >
+              <Users className="w-5 h-5" />
+              <span className="text-xs">Autores</span>
+            </Link>
+
+            {user && (
+              <Link 
+                to="/escribir" 
+                className={`beat-nav-link flex flex-col items-center space-y-1 ${isActive('/escribir') ? 'active' : ''}`}
+              >
+                <PenTool className="w-5 h-5" />
+                <span className="text-xs">Escribir</span>
+              </Link>
+            )}
+
+            {user ? (
+              <Link 
+                to="/perfil" 
+                className="beat-nav-link flex flex-col items-center space-y-1"
+              >
+                <User className="w-5 h-5" />
+                <span className="text-xs">Perfil</span>
+              </Link>
+            ) : (
+              <Link 
+                to="/login" 
+                className="beat-nav-link flex flex-col items-center space-y-1"
+              >
+                <LogIn className="w-5 h-5" />
+                <span className="text-xs">Entrar</span>
+              </Link>
+            )}
+          </div>
+        </div>
+      </nav>
+
       {/* Main Content */}
       <main className="min-h-screen py-8">
         {children}
