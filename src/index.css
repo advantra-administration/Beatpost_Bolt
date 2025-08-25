@@ -816,6 +816,8 @@
 }
 
 .ranking-number {
+  font-size: 20px;
+}
 /* Header Top Section */
 .newspaper-header-top {
   display: flex;
