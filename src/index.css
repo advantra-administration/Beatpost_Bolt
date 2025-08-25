@@ -1280,6 +1280,238 @@
   text-decoration: underline;
 }
 
+/* AUTHORS PAGE STYLES - Exact match to image */
+.authors-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  font-family: 'Crimson Text', Georgia, serif;
+  padding: 0 20px;
+}
+
+.authors-main-content {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+/* Search and Sort Controls */
+.authors-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+
+.authors-search-container {
+  flex: 1;
+  max-width: 400px;
+}
+
+.authors-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #8B1538;
+  border-radius: 20px;
+  padding: 8px 16px;
+  background: white;
+}
+
+.authors-search-icon {
+  width: 16px;
+  height: 16px;
+  color: #8B1538;
+  margin-right: 8px;
+}
+
+.authors-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  font-family: 'Crimson Text', serif;
+  flex: 1;
+}
+
+.authors-search-input::placeholder {
+  color: #8B1538;
+}
+
+.authors-sort-container {
+  position: relative;
+}
+
+.authors-sort-dropdown {
+  position: relative;
+}
+
+.authors-sort-btn {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-family: 'Crimson Text', serif;
+  white-space: nowrap;
+}
+
+.authors-sort-btn:hover {
+  border-color: #8B1538;
+}
+
+.authors-sort-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 10;
+  min-width: 180px;
+}
+
+.authors-sort-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  font-family: 'Crimson Text', serif;
+}
+
+.authors-sort-menu button:hover {
+  background: #f5f5f5;
+}
+
+/* Authors Grid */
+.authors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .authors-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .authors-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .authors-search-container {
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .authors-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Author Card */
+.author-card {
+  background: white;
+  border: 1px solid #eee;
+  padding: 20px;
+  text-align: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.author-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.author-avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.author-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%) contrast(1.1);
+}
+
+.author-info {
+  text-align: center;
+}
+
+.author-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-family: 'Source Serif Pro', serif;
+}
+
+.author-stats {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.author-stat {
+  font-size: 12px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.author-bio {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.author-profile-btn {
+  background: white;
+  border: 1px solid #333;
+  padding: 6px 16px;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+  font-family: 'Crimson Text', serif;
+  transition: all 0.2s ease;
+}
+
+.author-profile-btn:hover {
+  background: #333;
+  color: white;
+}
+
+/* Loading State */
+.authors-loading {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 /* Loading State */
 .newspaper-loading {
   max-width: 1200px;
