@@ -1,1 +1,2 @@
-backend/gcs-key.json
+node_modules
+dist
