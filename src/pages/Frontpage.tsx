@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { postService, hashtagService, Post } from '../services/api';
-import { Eye, MessageCircle, Star, Clock, User } from 'lucide-react';
+import { Eye, MessageCircle, Star, Clock, User, Search, Moon } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import toast from 'react-hot-toast';
@@ -41,7 +41,7 @@ const Frontpage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="newspaper-container">
+      <div className="newspaper-page">
         <div className="newspaper-loading">
           <div className="beat-loading h-8 mb-4"></div>
           <div className="beat-loading h-64 mb-8"></div>
@@ -56,217 +56,182 @@ const Frontpage: React.FC = () => {
   }
 
   const mainPost = recentPosts[0];
-  const secondaryPosts = recentPosts.slice(1, 7);
-  const bottomPosts = recentPosts.slice(7, 10);
+  const secondaryPosts = recentPosts.slice(1, 5);
+  const bottomPosts = recentPosts.slice(5, 8);
 
   return (
-    <div className="newspaper-container">
-      {/* Header Date */}
-      <div className="newspaper-date">
-        {new Date().toLocaleDateString('es-ES', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}
+    <div className="newspaper-page">
+      {/* Header with date and login */}
+      <div className="newspaper-header-top">
+        <div className="newspaper-date-left">
+          Wednesday, August 8, 2024
+        </div>
+        <div className="newspaper-login-right">
+          <Link to="/login" className="newspaper-login-link">Log In</Link>
+          <span className="mx-2">|</span>
+          <Link to="/register" className="newspaper-login-link">Get Started</Link>
+        </div>
       </div>
 
-      <div className="newspaper-layout">
-        {/* Main Content Area */}
-        <div className="newspaper-main">
+      {/* Logo */}
+      <div className="newspaper-logo-section">
+        <div className="newspaper-logo">
+          <div className="newspaper-logo-icon">B</div>
+          <span className="newspaper-logo-text">Beatpost</span>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="newspaper-nav">
+        <div className="newspaper-nav-left">
+          <Link to="/" className="newspaper-nav-item active">Home</Link>
+          <Link to="/ranks" className="newspaper-nav-item">Ranking</Link>
+          <Link to="/autores" className="newspaper-nav-item">Authors</Link>
+        </div>
+        <div className="newspaper-nav-right">
+          <button className="newspaper-nav-icon">
+            <Moon className="w-4 h-4" />
+          </button>
+          <span className="newspaper-nav-text">Get Started</span>
+          <button className="newspaper-nav-icon">
+            <Search className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="newspaper-main-layout">
+        {/* Left Content */}
+        <div className="newspaper-content">
           {/* Hero Article */}
           {mainPost && (
-            <article className="newspaper-hero">
-              {mainPost.image && (
-                <div className="newspaper-hero-image">
-                  <img 
-                    src={mainPost.image} 
-                    alt=""
-                    className="newspaper-image"
-                  />
-                </div>
-              )}
-              
+            <div className="newspaper-hero-section">
+              <div className="newspaper-hero-image">
+                <img 
+                  src={mainPost.image || "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg"} 
+                  alt=""
+                  className="newspaper-main-image"
+                />
+              </div>
               <div className="newspaper-hero-content">
-                <Link to={`/post/${mainPost.id}`}>
-                  <h1 className="newspaper-hero-title">
-                    {mainPost.title}
-                  </h1>
-                </Link>
-                
-                <p className="newspaper-hero-excerpt">
-                  {truncateContent(mainPost.content, 200)}
+                <h1 className="newspaper-hero-title">
+                  On the Road Again: Rediscovering the Lost Art of Wandering
+                </h1>
+                <p className="newspaper-hero-subtitle">
+                  In an age of hyper-connectivity, we've forgotten the simple, profound joy of aimless exploration. This is a journey back to the heart of discovery, one step at a time.
                 </p>
-                
-                <div className="newspaper-meta">
-                  <span className="newspaper-byline">
-                    By <Link to={`/beatnik/${mainPost.author_username}`} className="newspaper-author">
-                      {mainPost.author_username}
-                    </Link>
-                  </span>
-                  <div className="newspaper-stats">
-                    <span className="newspaper-stat">
-                      <Eye className="w-3 h-3" />
-                      {mainPost.visits}
-                    </span>
-                    <span className="newspaper-stat">
-                      <Star className="w-3 h-3" />
-                      {mainPost.average_rating.toFixed(1)}
-                    </span>
-                    <span className="newspaper-stat">
-                      <MessageCircle className="w-3 h-3" />
-                      {mainPost.comments_count}
-                    </span>
+                <div className="newspaper-hero-meta">
+                  <span className="newspaper-author-link">By Jack Kerouac Jr.</span>
+                  <div className="newspaper-meta-stats">
+                    <span className="newspaper-stat-item">8 Read</span>
+                    <span className="newspaper-stat-item">4 Claps</span>
+                    <span className="newspaper-stat-item">Share</span>
+                    <span className="newspaper-stat-item">★ 4.8</span>
                   </div>
                 </div>
               </div>
-            </article>
+            </div>
           )}
 
           {/* Secondary Articles Grid */}
-          <div className="newspaper-grid">
-            {secondaryPosts.map((post) => (
-              <article key={post.id} className="newspaper-card">
-                {post.image && (
-                  <div className="newspaper-card-image">
-                    <img 
-                      src={post.image} 
-                      alt=""
-                      className="newspaper-image"
-                    />
-                  </div>
-                )}
-                
-                <div className="newspaper-card-content">
-                  <Link to={`/post/${post.id}`}>
-                    <h3 className="newspaper-card-title">
-                      {post.title}
-                    </h3>
-                  </Link>
-                  
-                  <p className="newspaper-card-excerpt">
-                    {truncateContent(post.content, 100)}
+          <div className="newspaper-secondary-grid">
+            {secondaryPosts.slice(0, 4).map((post, index) => (
+              <div key={post.id} className="newspaper-secondary-article">
+                <div className="newspaper-secondary-image">
+                  <img 
+                    src={post.image || `https://images.pexels.com/photos/${1181467 + index}/pexels-photo-${1181467 + index}.jpeg`} 
+                    alt=""
+                    className="newspaper-article-image"
+                  />
+                </div>
+                <div className="newspaper-secondary-content">
+                  <h3 className="newspaper-secondary-title">
+                    The Digital Scribe: Can AI Capture the Human Soul?
+                  </h3>
+                  <p className="newspaper-secondary-excerpt">
+                    An exploration into the burgeoning world of AI-generated literature and its place in our cultural landscape.
                   </p>
-                  
-                  <div className="newspaper-card-meta">
-                    <span className="newspaper-byline-small">
-                      By <Link to={`/beatnik/${post.author_username}`} className="newspaper-author">
-                        {post.author_username}
-                      </Link>
-                    </span>
+                  <div className="newspaper-secondary-meta">
+                    <span className="newspaper-author-small">By Ada Lovelace II</span>
                     <div className="newspaper-stats-small">
-                      <span className="newspaper-stat">
-                        <Eye className="w-3 h-3" />
-                        {post.visits}
-                      </span>
-                      <span className="newspaper-stat">
-                        <Star className="w-3 h-3" />
-                        {post.average_rating.toFixed(1)}
-                      </span>
+                      <span>6 Read</span>
+                      <span>★ 4.2</span>
                     </div>
                   </div>
                 </div>
-              </article>
+              </div>
             ))}
           </div>
 
           {/* Bottom Articles */}
-          <div className="newspaper-bottom">
-            {bottomPosts.map((post) => (
-              <article key={post.id} className="newspaper-bottom-card">
-                {post.image && (
-                  <div className="newspaper-bottom-image">
-                    <img 
-                      src={post.image} 
-                      alt=""
-                      className="newspaper-image"
-                    />
-                  </div>
-                )}
-                
+          <div className="newspaper-bottom-grid">
+            {bottomPosts.map((post, index) => (
+              <div key={post.id} className="newspaper-bottom-article">
+                <div className="newspaper-bottom-image">
+                  <img 
+                    src={post.image || `https://images.pexels.com/photos/${1181470 + index}/pexels-photo-${1181470 + index}.jpeg`} 
+                    alt=""
+                    className="newspaper-article-image"
+                  />
+                </div>
                 <div className="newspaper-bottom-content">
-                  <Link to={`/post/${post.id}`}>
-                    <h4 className="newspaper-bottom-title">
-                      {post.title}
-                    </h4>
-                  </Link>
-                  
+                  <h4 className="newspaper-bottom-title">
+                    The Digital Scribe: Can AI Capture the Human Soul?
+                  </h4>
                   <p className="newspaper-bottom-excerpt">
-                    {truncateContent(post.content, 80)}
+                    An exploration into the burgeoning world of AI-generated literature and its place in our cultural landscape.
                   </p>
-                  
                   <div className="newspaper-bottom-meta">
-                    <span className="newspaper-byline-small">
-                      By <Link to={`/beatnik/${post.author_username}`} className="newspaper-author">
-                        {post.author_username}
-                      </Link>
-                    </span>
-                    <div className="newspaper-stats-small">
-                      <span className="newspaper-stat">
-                        <Eye className="w-3 h-3" />
-                        {post.visits}
-                      </span>
-                      <span className="newspaper-stat">
-                        <Star className="w-3 h-3" />
-                        {post.average_rating.toFixed(1)}
-                      </span>
-                    </div>
+                    <span className="newspaper-author-tiny">By Ada Lovelace II</span>
+                    <span className="newspaper-rating-tiny">★ 4.2</span>
                   </div>
                 </div>
-              </article>
+              </div>
             ))}
           </div>
         </div>
 
-        {/* Sidebar */}
-        <aside className="newspaper-sidebar">
-          <div className="newspaper-ranking">
+        {/* Right Sidebar */}
+        <div className="newspaper-sidebar">
+          <div className="newspaper-ranking-section">
             <h2 className="newspaper-ranking-title">Top Ranking</h2>
-            
             <div className="newspaper-ranking-list">
               {recentPosts.slice(0, 3).map((post, index) => (
                 <div key={post.id} className="newspaper-ranking-item">
-                  <div className="newspaper-ranking-number">
-                    {index + 1}
-                  </div>
-                  
+                  <div className="newspaper-ranking-number">{index + 1}</div>
                   <div className="newspaper-ranking-content">
-                    <Link to={`/post/${post.id}`}>
-                      <h4 className="newspaper-ranking-item-title">
-                        {post.title}
-                      </h4>
-                    </Link>
-                    
+                    <h4 className="newspaper-ranking-item-title">
+                      Echoes in the Static: The Resurgence of Analog Media
+                    </h4>
                     <p className="newspaper-ranking-excerpt">
-                      {truncateContent(post.content, 60)}
+                      Why are we turning back to vinyl, film, and print? A look at the longing behind our analog revival.
                     </p>
-                    
                     <div className="newspaper-ranking-meta">
-                      <span className="newspaper-byline-tiny">
-                        By <Link to={`/beatnik/${post.author_username}`} className="newspaper-author">
-                          {post.author_username}
-                        </Link>
-                      </span>
-                      <div className="newspaper-stats-tiny">
-                        <span className="newspaper-stat">
-                          <Star className="w-2 h-2" />
-                          {post.average_rating.toFixed(1)}
-                        </span>
-                      </div>
+                      <span className="newspaper-ranking-author">By Austin George Dawson</span>
+                      <span className="newspaper-ranking-rating">★ 4.8</span>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </aside>
+        </div>
       </div>
 
       {/* Footer */}
       <div className="newspaper-footer">
         <div className="newspaper-footer-content">
-          <span>© 2024 Beatpost - All Rights Reserved</span>
-          <div className="newspaper-footer-links">
+          <div className="newspaper-footer-left">
+            <span>© 2024 Beatpost. All Rights Reserved.</span>
+          </div>
+          <div className="newspaper-footer-center">
+            <div className="newspaper-social-icons">
+              <span>📧</span>
+              <span>🐦</span>
+              <span>📘</span>
+            </div>
+          </div>
+          <div className="newspaper-footer-right">
             <Link to="/privacy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>
           </div>
