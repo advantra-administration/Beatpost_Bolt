@@ -92,7 +92,6 @@ const Frontpage: React.FC = () => {
           <button className="newspaper-nav-icon">
             <Moon className="w-4 h-4" />
           </button>
-          <span className="newspaper-nav-text">Get Started</span>
           <button className="newspaper-nav-icon">
             <Search className="w-4 h-4" />
           </button>
