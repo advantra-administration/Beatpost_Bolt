@@ -61,6 +61,18 @@ const Frontpage: React.FC = () => {
 
   return (
     <div className="newspaper-page">
+      {/* Header with date and login */}
+      <div className="newspaper-header-top">
+        <div className="newspaper-date-left">
+          Wednesday, August 8, 2024
+        </div>
+        <div className="newspaper-login-right">
+          <Link to="/login" className="newspaper-login-link">Log In</Link>
+          <span className="mx-2">|</span>
+          <Link to="/register" className="newspaper-login-link">Get Started</Link>
+        </div>
+      </div>
+
       {/* Logo */}
       <div className="newspaper-logo-section">
         <div className="newspaper-logo">
