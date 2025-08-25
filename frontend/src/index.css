@@ -1,0 +1,229 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Source+Serif+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* Base styles inspired by classic newspapers */
+@layer base {
+  html {
+    font-family: 'Crimson Text', 'Source Serif Pro', Georgia, serif;
+  }
+  
+  body {
+    @apply bg-newspaper-50 text-newspaper-900 leading-relaxed;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Serif Pro', Georgia, serif;
+    font-weight: 600;
+  }
+}
+
+/* Components */
+@layer components {
+  .beat-container {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .beat-card {
+    @apply bg-white border border-newspaper-200 shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+  
+  .beat-button {
+    @apply px-4 py-2 bg-newspaper-900 text-white font-medium 
+           hover:bg-newspaper-800 transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-newspaper-700 focus:ring-offset-1;
+  }
+  
+  .beat-button-secondary {
+    @apply px-4 py-2 bg-transparent text-newspaper-900 font-medium border border-newspaper-300
+           hover:bg-newspaper-100 transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-newspaper-700 focus:ring-offset-1;
+  }
+  
+  .beat-input {
+    @apply w-full px-3 py-2 border border-newspaper-300 bg-white text-newspaper-900
+           focus:outline-none focus:ring-2 focus:ring-newspaper-700 focus:border-transparent
+           placeholder:text-newspaper-400;
+  }
+  
+  .beat-header {
+    @apply border-b-2 border-newspaper-900 bg-white;
+  }
+  
+  .beat-nav-link {
+    @apply text-newspaper-700 hover:text-newspaper-900 font-medium
+           transition-colors duration-200 px-3 py-2;
+  }
+  
+  .beat-nav-link.active {
+    @apply text-newspaper-900 border-b-2 border-newspaper-900;
+  }
+  
+  .beat-article {
+    @apply prose prose-lg max-w-none;
+  }
+  
+  .beat-article h1 {
+    @apply text-3xl font-bold text-newspaper-900 mb-4 leading-tight;
+  }
+  
+  .beat-article h2 {
+    @apply text-2xl font-semibold text-newspaper-800 mb-3 leading-snug;
+  }
+  
+  .beat-article p {
+    @apply mb-4 text-newspaper-800 leading-relaxed;
+  }
+  
+  .beat-hashtag {
+    @apply inline-block px-2 py-1 bg-newspaper-100 text-newspaper-700 text-sm font-medium
+           hover:bg-newspaper-200 transition-colors duration-200;
+  }
+  
+  .beat-rating {
+    @apply flex items-center space-x-1;
+  }
+  
+  .beat-star {
+    @apply w-5 h-5 cursor-pointer transition-colors duration-200;
+  }
+  
+  .beat-star.filled {
+    @apply text-yellow-600;
+  }
+  
+  .beat-star.empty {
+    @apply text-newspaper-300 hover:text-yellow-400;
+  }
+  
+  .beat-guindilla {
+    @apply w-5 h-5 cursor-pointer transition-colors duration-200;
+  }
+  
+  .beat-guindilla.filled {
+    @apply text-red-600;
+  }
+  
+  .beat-guindilla.empty {
+    @apply text-newspaper-300 hover:text-red-400;
+  }
+  
+  .beat-mojo {
+    @apply inline-flex items-center px-2 py-1 bg-beat-100 text-beat-800 text-sm font-semibold;
+  }
+  
+  .beat-frontpage-title {
+    @apply text-4xl font-bold text-center text-newspaper-900 mb-2
+           font-serif tracking-tight;
+  }
+  
+  .beat-frontpage-subtitle {
+    @apply text-lg text-center text-newspaper-600 mb-8 italic
+           font-serif;
+  }
+  
+  .beat-post-card {
+    @apply beat-card p-6 mb-6;
+  }
+  
+  .beat-post-title {
+    @apply text-xl font-semibold text-newspaper-900 mb-2 hover:text-newspaper-700
+           transition-colors duration-200 cursor-pointer;
+  }
+  
+  .beat-post-meta {
+    @apply flex items-center space-x-4 text-sm text-newspaper-600 mb-3;
+  }
+  
+  .beat-post-excerpt {
+    @apply text-newspaper-800 mb-4 leading-relaxed;
+  }
+  
+  .beat-post-footer {
+    @apply flex items-center justify-between pt-4 border-t border-newspaper-200;
+  }
+  
+  .beat-comment {
+    @apply bg-newspaper-50 border-l-4 border-newspaper-300 p-4 mb-4;
+  }
+  
+  .beat-loading {
+    @apply animate-pulse bg-newspaper-200;
+  }
+  
+  .beat-error {
+    @apply bg-red-50 border border-red-200 text-red-800 p-4;
+  }
+  
+  .beat-success {
+    @apply bg-green-50 border border-green-200 text-green-800 p-4;
+  }
+}
+
+/* Utilities */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .newspaper-columns {
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid #e4e4e7;
+  }
+  
+  .newspaper-columns-3 {
+    column-count: 3;
+    column-gap: 1.5rem;
+    column-rule: 1px solid #e4e4e7;
+  }
+  
+  @media (max-width: 768px) {
+    .newspaper-columns,
+    .newspaper-columns-3 {
+      column-count: 1;
+    }
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a1a1aa;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #71717a;
+}
+
+/* Print styles for newspaper feel */
+@media print {
+  .beat-container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .beat-header,
+  .beat-nav-link,
+  .beat-button,
+  .beat-button-secondary {
+    display: none;
+  }
+  
+  .beat-article {
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid #000;
+  }
+}

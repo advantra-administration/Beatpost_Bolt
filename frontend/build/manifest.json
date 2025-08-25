@@ -1,0 +1,16 @@
+{
+  "short_name": "Beatpost",
+  "name": "Beatpost - Plataforma de publicación Beat",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#18181b",
+  "background_color": "#fafafa",
+  "description": "Plataforma de publicación abierta inspirada en la Beat Generation"
+}
