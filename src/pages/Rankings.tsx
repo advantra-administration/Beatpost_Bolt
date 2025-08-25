@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { postService, hashtagService, Post } from '../services/api';
-import { TrendingUp, Hash, Eye, Star, MessageCircle, Clock, Filter } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { Search, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Rankings: React.FC = () => {
@@ -12,29 +10,136 @@ const Rankings: React.FC = () => {
   const [hashtags, setHashtags] = useState<{ hashtag: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedHashtag, setSelectedHashtag] = useState<string>(searchParams.get('hashtag') || '');
+  const [sortBy, setSortBy] = useState('Most highest');
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+
+  // Mock data for exact replication
+  const mockPosts = [
+    {
+      id: '1',
+      title: 'The Digital Scribe: Can AI Capture the Human Soul?',
+      content: 'An exploration into the burgeoning world of AI-generated literature and its place in our cultural landscape.',
+      author_username: 'Ada Lovelace II',
+      image: 'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg',
+      visits: 1200,
+      comments_count: 45,
+      average_rating: 4.8,
+      created_at: '2024-08-07T10:00:00Z'
+    },
+    {
+      id: '2', 
+      title: 'The Digital Scribe: Can AI Capture the Human Soul?',
+      content: 'An exploration into the burgeoning world of AI-generated literature and its place in our cultural landscape.',
+      author_username: 'Ada Lovelace II',
+      image: 'https://images.pexels.com/photos/1181468/pexels-photo-1181468.jpeg',
+      visits: 1150,
+      comments_count: 42,
+      average_rating: 4.7,
+      created_at: '2024-08-06T10:00:00Z'
+    },
+    {
+      id: '3',
+      title: 'The Digital Scribe: Can AI Capture the Human Soul?',
+      content: 'An exploration into the burgeoning world of AI-generated literature and its place in our cultural landscape.',
+      author_username: 'Ada Lovelace II', 
+      image: 'https://images.pexels.com/photos/1181469/pexels-photo-1181469.jpeg',
+      visits: 1100,
+      comments_count: 38,
+      average_rating: 4.6,
+      created_at: '2024-08-05T10:00:00Z'
+    },
+    {
+      id: '4',
+      title: 'The Digital Scribe: Can AI Capture the Human Soul?',
+      content: 'An exploration into the burgeoning world of AI-generated literature and its place in our cultural landscape.',
+      author_username: 'Ada Lovelace II',
+      image: 'https://images.pexels.com/photos/1181470/pexels-photo-1181470.jpeg',
+      visits: 1050,
+      comments_count: 35,
+      average_rating: 4.5,
+      created_at: '2024-08-04T10:00:00Z'
+    },
+    {
+      id: '5',
+      title: 'Quantum Gastronomy: Tasting the Future of Food',
+      content: 'How molecular gastronomy is revolutionizing the culinary world, exploring how science and art intersect in the kitchen.',
+      author_username: 'Ferran Adrià Jr.',
+      image: 'https://images.pexels.com/photos/1181471/pexels-photo-1181471.jpeg',
+      visits: 980,
+      comments_count: 32,
+      average_rating: 4.4,
+      created_at: '2024-08-03T10:00:00Z'
+    },
+    {
+      id: '6',
+      title: 'Bio Hacking Immortality: The Ethics of Personal Life',
+      content: 'A deep dive into the moral and practical implications of extending life using biohack technology.',
+      author_username: 'Dr. Elizabeth Blackburn',
+      image: 'https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg',
+      visits: 920,
+      comments_count: 28,
+      average_rating: 4.3,
+      created_at: '2024-08-02T10:00:00Z'
+    },
+    {
+      id: '7',
+      title: 'The Sentient City: Urban Planning in the Age of AI',
+      content: 'Exploring how interconnected smart cities work and how AI will impact the future of urban planning.',
+      author_username: 'Jane Jacobs III',
+      image: 'https://images.pexels.com/photos/1181473/pexels-photo-1181473.jpeg',
+      visits: 860,
+      comments_count: 25,
+      average_rating: 4.2,
+      created_at: '2024-08-01T10:00:00Z'
+    },
+    {
+      id: '8',
+      title: 'Virtual Sanctuaries: Finding Spirituality in the Metaverse',
+      content: 'Can digital worlds provide the same spiritual experiences and connections as traditional religious spaces?',
+      author_username: 'Thomas Merton IV',
+      image: 'https://images.pexels.com/photos/1181474/pexels-photo-1181474.jpeg',
+      visits: 800,
+      comments_count: 22,
+      average_rating: 4.1,
+      created_at: '2024-07-31T10:00:00Z'
+    },
+    {
+      id: '9',
+      title: 'Decoding Dreams: Neuroscience Meets Machine Learning',
+      content: 'The latest breakthroughs in technology that can understand and interpret human dreams using deep learning.',
+      author_username: 'Dr. Carl Jung Jr.',
+      image: 'https://images.pexels.com/photos/1181475/pexels-photo-1181475.jpeg',
+      visits: 740,
+      comments_count: 19,
+      average_rating: 4.0,
+      created_at: '2024-07-30T10:00:00Z'
+    },
+    {
+      id: '10',
+      title: 'The Last Analog Musician: A Profile',
+      content: 'The portrait of one of the last musicians who still uses analog instruments in a digital world.',
+      author_username: 'Brian Eno II',
+      image: 'https://images.pexels.com/photos/1181476/pexels-photo-1181476.jpeg',
+      visits: 680,
+      comments_count: 16,
+      average_rating: 3.9,
+      created_at: '2024-07-29T10:00:00Z'
+    }
+  ];
+
+  const mockHashtags = [
+    'science', 'literature', 'tech', 'philosophy', 'gastronomy', 'bioethics'
+  ];
 
   useEffect(() => {
-    loadData();
-  }, [selectedHashtag]);
-
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const [ranksData, hashtagsData] = await Promise.all([
-        postService.getRanks(selectedHashtag || undefined),
-        hashtagService.getPopularHashtags()
-      ]);
-
-      setPosts(ranksData.posts);
-      setHashtags(hashtagsData);
-    } catch (error) {
-      toast.error('Error cargando los rankings');
-    } finally {
+    // Simulate loading
+    setTimeout(() => {
+      setPosts(mockPosts);
       setLoading(false);
-    }
-  };
+    }, 500);
+  }, [selectedHashtag, sortBy]);
 
-  const handleHashtagChange = (hashtag: string) => {
+  const handleHashtagClick = (hashtag: string) => {
     setSelectedHashtag(hashtag);
     if (hashtag) {
       setSearchParams({ hashtag });
@@ -43,272 +148,191 @@ const Rankings: React.FC = () => {
     }
   };
 
-  const truncateContent = (content: string, maxLength: number = 150) => {
-    if (content.length <= maxLength) return content;
-    return content.substring(0, maxLength) + '...';
-  };
-
-  const getRankPosition = (index: number) => {
-    if (index === 0) return '🥇';
-    if (index === 1) return '🥈';
-    if (index === 2) return '🥉';
-    return `#${index + 1}`;
-  };
-
-  const getRankClass = (index: number) => {
-    if (index === 0) return 'bg-yellow-50 border-yellow-200';
-    if (index === 1) return 'bg-gray-50 border-gray-300';
-    if (index === 2) return 'bg-orange-50 border-orange-200';
-    return '';
+  const handleSortChange = (newSort: string) => {
+    setSortBy(newSort);
+    setShowSortDropdown(false);
   };
 
   if (loading) {
     return (
-      <div className="beat-container">
-        <div className="beat-card p-8 mb-8">
+      <div className="ranking-page">
+        <div className="ranking-loading">
           <div className="beat-loading h-8 mb-4"></div>
-          <div className="beat-loading h-4 mb-8"></div>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="beat-card p-6 mb-6">
-                <div className="beat-loading h-6 mb-4"></div>
-                <div className="beat-loading h-4 mb-2"></div>
-                <div className="beat-loading h-32"></div>
-              </div>
-            ))}
-          </div>
-          <div>
-            <div className="beat-card p-6">
-              <div className="beat-loading h-6 mb-4"></div>
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="beat-loading h-8 mb-2"></div>
-              ))}
-            </div>
-          </div>
+          <div className="beat-loading h-64"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="beat-container">
-      {/* Header */}
-      <div className="beat-card p-8 mb-8">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center">
-            <TrendingUp className="w-8 h-8 text-newspaper-900 mr-3" />
-            <div>
-              <h1 className="text-3xl font-bold text-newspaper-900">
-                Rankings
-              </h1>
-              <p className="text-newspaper-600 mt-1">
-                {selectedHashtag 
-                  ? `Artículos más populares en #${selectedHashtag}`
-                  : 'Los artículos más populares de Beatpost'
-                }
-              </p>
-            </div>
-          </div>
-          
-          {selectedHashtag && (
-            <button
-              onClick={() => handleHashtagChange('')}
-              className="beat-button-secondary flex items-center space-x-2"
-            >
-              <Filter className="w-4 h-4" />
-              <span>Ver todos</span>
-            </button>
-          )}
+    <div className="ranking-page">
+      {/* Header - Same as frontpage */}
+      <div className="newspaper-header-top">
+        <div className="newspaper-date-left">
+          Wednesday, August 8, 2024
+        </div>
+        <div className="newspaper-login-right">
+          <Link to="/login" className="newspaper-login-link">Log In</Link>
+          <span className="mx-2">|</span>
+          <Link to="/register" className="newspaper-login-link">Get Started</Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Main Rankings */}
-        <div className="lg:col-span-3">
-          {posts.length === 0 ? (
-            <div className="beat-card p-8 text-center">
-              <TrendingUp className="w-16 h-16 mx-auto mb-4 text-newspaper-400" />
-              <h3 className="text-xl font-semibold text-newspaper-700 mb-2">
-                No hay artículos
-              </h3>
-              <p className="text-newspaper-600">
-                {selectedHashtag 
-                  ? `No se encontraron artículos con el hashtag #${selectedHashtag}`
-                  : 'Aún no hay artículos publicados'
-                }
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {posts.map((post, index) => (
-                <article 
-                  key={post.id} 
-                  className={`beat-post-card ${getRankClass(index)}`}
-                >
-                  <div className="flex items-start space-x-4">
-                    {/* Rank Position */}
-                    <div className="flex-shrink-0 text-center">
-                      <div className="text-2xl font-bold mb-1">
-                        {getRankPosition(index)}
-                      </div>
-                      {index < 3 && (
-                        <div className="text-xs text-newspaper-600">
-                          TOP {index + 1}
-                        </div>
-                      )}
-                    </div>
+      <div className="newspaper-logo-section">
+        <div className="newspaper-logo">
+          <div className="newspaper-logo-icon">B</div>
+          <span className="newspaper-logo-text">Beatpost</span>
+        </div>
+      </div>
 
-                    {/* Post Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="md:flex md:space-x-6">
-                        {post.image && (
-                          <div className="md:w-1/4 mb-4 md:mb-0">
-                            <img 
-                              src={post.image} 
-                              alt=""
-                              className="w-full h-32 object-cover beat-image-bw"
-                            />
-                          </div>
-                        )}
-                        
-                        <div className={post.image ? "md:w-3/4" : "w-full"}>
-                          <Link to={`/post/${post.id}`}>
-                            <h3 className="beat-post-title text-xl mb-2">
-                              {post.title}
-                            </h3>
-                          </Link>
-                          
-                          <div className="beat-post-meta mb-3">
-                            <Link 
-                              to={`/beatnik/${post.author_username}`}
-                              className="font-medium hover:text-newspaper-900"
-                            >
-                              {post.author_username}
-                            </Link>
-                            <span className="flex items-center">
-                              <Clock className="w-4 h-4 mr-1" />
-                              {formatDistanceToNow(new Date(post.created_at), { 
-                                addSuffix: true, 
-                                locale: es 
-                              })}
-                            </span>
-                          </div>
-                          
-                          <p className="beat-post-excerpt mb-4">
-                            {truncateContent(post.content)}
-                          </p>
-                          
-                          <div className="flex items-center justify-between">
-                            <div className="flex flex-wrap gap-2">
-                              {post.hashtags.slice(0, 3).map((tag) => (
-                                <button
-                                  key={tag}
-                                  onClick={() => handleHashtagChange(tag)}
-                                  className={`beat-hashtag ${
-                                    selectedHashtag === tag ? 'bg-newspaper-300' : ''
-                                  }`}
-                                >
-                                  #{tag}
-                                </button>
-                              ))}
-                            </div>
-                            
-                            <div className="flex items-center space-x-4 text-sm text-newspaper-600">
-                              <span className="flex items-center">
-                                <Eye className="w-4 h-4 mr-1" />
-                                {post.visits}
-                              </span>
-                              <span className="flex items-center">
-                                <Star className="w-4 h-4 mr-1" />
-                                {post.average_rating.toFixed(1)}
-                              </span>
-                              <span className="flex items-center">
-                                <MessageCircle className="w-4 h-4 mr-1" />
-                                {post.comments_count}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
+      <div className="newspaper-nav">
+        <div className="newspaper-nav-left">
+          <Link to="/" className="newspaper-nav-item">Home</Link>
+          <Link to="/ranks" className="newspaper-nav-item active">Ranking</Link>
+          <Link to="/autores" className="newspaper-nav-item">Authors</Link>
+        </div>
+        <div className="newspaper-nav-right">
+          <span className="newspaper-nav-text">LOGIN</span>
+          <button className="newspaper-nav-icon">
+            <Search className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="ranking-content">
+        {/* Title and Description */}
+        <div className="ranking-header">
+          <h1 className="ranking-title">Top Articles by Hashtag</h1>
+          <p className="ranking-description">
+            Explore the most visited, rated, and discussed articles in each category.
+          </p>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-8">
-          {/* All Hashtags */}
-          <div className="beat-card p-6">
-            <h3 className="text-lg font-semibold text-newspaper-900 mb-4 flex items-center">
-              <Hash className="w-5 h-5 mr-2" />
-              Explorar por hashtag
-            </h3>
-            
-            <div className="space-y-2">
-              <button
-                onClick={() => handleHashtagChange('')}
-                className={`w-full text-left py-2 px-3 transition-colors ${
-                  !selectedHashtag 
-                    ? 'bg-newspaper-200 text-newspaper-900 font-medium' 
-                    : 'hover:bg-newspaper-100'
-                }`}
-              >
-                <span className="text-sm">📊 Todos los artículos</span>
-              </button>
-              
-              {hashtags.map((item) => (
-                <button
-                  key={item.hashtag}
-                  onClick={() => handleHashtagChange(item.hashtag)}
-                  className={`w-full text-left flex items-center justify-between py-2 px-3 transition-colors ${
-                    selectedHashtag === item.hashtag 
-                      ? 'bg-newspaper-200 text-newspaper-900 font-medium' 
-                      : 'hover:bg-newspaper-100'
-                  }`}
-                >
-                  <span className="text-sm">#{item.hashtag}</span>
-                  <span className="text-xs text-newspaper-600 bg-newspaper-300 px-2 py-1 rounded-full">
-                    {item.count}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
+        {/* Hashtag Filters */}
+        <div className="ranking-hashtags">
+          <button 
+            className={`ranking-hashtag-btn ${!selectedHashtag ? 'active' : ''}`}
+            onClick={() => handleHashtagClick('')}
+          >
+            science
+          </button>
+          <button 
+            className={`ranking-hashtag-btn ${selectedHashtag === 'literature' ? 'active' : ''}`}
+            onClick={() => handleHashtagClick('literature')}
+          >
+            literature
+          </button>
+          <button 
+            className={`ranking-hashtag-btn ${selectedHashtag === 'tech' ? 'active' : ''}`}
+            onClick={() => handleHashtagClick('tech')}
+          >
+            tech
+          </button>
+          <button 
+            className={`ranking-hashtag-btn ${selectedHashtag === 'philosophy' ? 'active' : ''}`}
+            onClick={() => handleHashtagClick('philosophy')}
+          >
+            philosophy
+          </button>
+          <button 
+            className={`ranking-hashtag-btn ${selectedHashtag === 'gastronomy' ? 'active' : ''}`}
+            onClick={() => handleHashtagClick('gastronomy')}
+          >
+            gastronomy
+          </button>
+          <button 
+            className={`ranking-hashtag-btn ${selectedHashtag === 'bioethics' ? 'active' : ''}`}
+            onClick={() => handleHashtagClick('bioethics')}
+          >
+            bioethics
+          </button>
+          <button className="ranking-hashtag-search">
+            <Search className="w-4 h-4 mr-1" />
+            Search for more hashtags
+          </button>
+        </div>
 
-          {/* Ranking Info */}
-          <div className="beat-card p-6">
-            <h3 className="text-lg font-semibold text-newspaper-900 mb-4">
-              ¿Cómo funcionan los rankings?
-            </h3>
-            <div className="text-sm text-newspaper-700 space-y-3">
-              <p>
-                Los artículos se ordenan por su puntuación total, que incluye:
-              </p>
-              <ul className="space-y-1 ml-4">
-                <li>• <strong>Visitas:</strong> Número de lectores</li>
-                <li>• <strong>Valoraciones:</strong> Puntuación de 1-5 estrellas</li>
-                <li>• <strong>Comentarios:</strong> Participación de la comunidad</li>
-                <li>• <strong>Mojo del autor:</strong> Reputación del escritor</li>
-              </ul>
-              <div className="beat-quote mt-4">
-                "La calidad siempre supera a la cantidad"
+        {/* Sort Controls */}
+        <div className="ranking-controls">
+          <div className="ranking-sort-section">
+            <span className="ranking-sort-label">Sort by:</span>
+            <div className="ranking-sort-dropdown">
+              <button 
+                className="ranking-sort-btn"
+                onClick={() => setShowSortDropdown(!showSortDropdown)}
+              >
+                {sortBy}
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
+              {showSortDropdown && (
+                <div className="ranking-sort-menu">
+                  <button onClick={() => handleSortChange('Most highest')}>Most highest</button>
+                  <button onClick={() => handleSortChange('Most visited')}>Most visited</button>
+                  <button onClick={() => handleSortChange('Most recent')}>Most recent</button>
+                </div>
+              )}
+            </div>
+            <span className="ranking-sort-label">Most highest</span>
+            <span className="ranking-sort-label">For last</span>
+          </div>
+        </div>
+
+        {/* Articles List */}
+        <div className="ranking-articles">
+          {posts.map((post, index) => (
+            <div key={post.id} className="ranking-article">
+              <div className="ranking-number">
+                #{index + 1}
+              </div>
+              
+              <div className="ranking-article-image">
+                <img 
+                  src={post.image} 
+                  alt=""
+                  className="newspaper-image"
+                />
+              </div>
+              
+              <div className="ranking-article-content">
+                <h3 className="ranking-article-title">
+                  {post.title}
+                </h3>
+                <p className="ranking-article-excerpt">
+                  {post.content}
+                </p>
+                <div className="ranking-article-meta">
+                  <span className="ranking-article-author">
+                    By {post.author_username}
+                  </span>
+                  <div className="ranking-article-stats">
+                    <span className="ranking-stat">👁 {post.visits.toLocaleString()}</span>
+                    <span className="ranking-stat">💬 {post.comments_count} Comments</span>
+                    <span className="ranking-stat">⭐ {post.average_rating}</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
+        </div>
+      </div>
 
-          {/* Top Writers */}
-          <div className="beat-card p-6">
-            <h3 className="text-lg font-semibold text-newspaper-900 mb-4">
-              Escritores destacados
-            </h3>
-            <div className="text-sm text-newspaper-600">
-              <p>Esta sección mostrará los autores con mayor Mojo próximamente.</p>
+      {/* Footer */}
+      <div className="newspaper-footer">
+        <div className="newspaper-footer-content">
+          <div className="newspaper-footer-left">
+            <span>© 2024 Beatpost. All Rights Reserved.</span>
+          </div>
+          <div className="newspaper-footer-center">
+            <div className="newspaper-social-icons">
+              <span>📧</span>
+              <span>🐦</span>
+              <span>📘</span>
             </div>
+          </div>
+          <div className="newspaper-footer-right">
+            <Link to="/privacy">Privacy Policy</Link>
+            <Link to="/terms">Terms of Service</Link>
           </div>
         </div>
       </div>
