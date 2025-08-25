@@ -161,6 +161,18 @@ const Rankings: React.FC = () => {
 
   return (
     <div className="ranking-page">
+      {/* Header - Same as frontpage */}
+      <div className="newspaper-header-top">
+        <div className="newspaper-date-left">
+          Wednesday, August 8, 2024
+        </div>
+        <div className="newspaper-login-right">
+          <Link to="/login" className="newspaper-login-link">Log In</Link>
+          <span className="mx-2">|</span>
+          <Link to="/register" className="newspaper-login-link">Get Started</Link>
+        </div>
+      </div>
+
       <div className="newspaper-logo-section">
         <div className="newspaper-logo">
           <div className="newspaper-logo-icon">B</div>
