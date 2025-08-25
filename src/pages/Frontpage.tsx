@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { postService, hashtagService, Post } from '../services/api';
-import { Eye, MessageCircle, Star, Hash, Clock } from 'lucide-react';
+import { Eye, MessageCircle, Star, Clock, User } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import toast from 'react-hot-toast';
@@ -17,7 +17,7 @@ const Frontpage: React.FC = () => {
       try {
         const [frontpageData, recentData, hashtagsData] = await Promise.all([
           postService.getFrontpage(),
-          postService.getPosts(0, 10),
+          postService.getPosts(0, 20),
           hashtagService.getPopularHashtags()
         ]);
 
@@ -34,248 +34,241 @@ const Frontpage: React.FC = () => {
     loadData();
   }, []);
 
-  const truncateContent = (content: string, maxLength: number = 200) => {
+  const truncateContent = (content: string, maxLength: number = 120) => {
     if (content.length <= maxLength) return content;
     return content.substring(0, maxLength) + '...';
   };
 
   if (loading) {
     return (
-      <div className="beat-container">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Loading skeleton */}
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="beat-card p-6">
-              <div className="beat-loading h-6 mb-4"></div>
-              <div className="beat-loading h-4 mb-2"></div>
-              <div className="beat-loading h-4 mb-2"></div>
-              <div className="beat-loading h-32"></div>
-            </div>
-          ))}
+      <div className="newspaper-container">
+        <div className="newspaper-loading">
+          <div className="beat-loading h-8 mb-4"></div>
+          <div className="beat-loading h-64 mb-8"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="beat-loading h-48"></div>
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
+  const mainPost = recentPosts[0];
+  const secondaryPosts = recentPosts.slice(1, 7);
+  const bottomPosts = recentPosts.slice(7, 10);
+
   return (
-    <div className="beat-container">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="beat-frontpage-title">
-          Beatpost
-        </h1>
-        <p className="beat-frontpage-subtitle">
-          Escribe con intención. Lee con atención.
-        </p>
-        <div className="w-24 h-0.5 bg-newspaper-900 mx-auto mt-4"></div>
+    <div className="newspaper-container">
+      {/* Header Date */}
+      <div className="newspaper-date">
+        {new Date().toLocaleDateString('es-ES', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-3">
-          {/* Featured Posts */}
-          {featuredPosts.length > 0 && (
-            <section className="mb-12">
-              <h2 className="text-2xl font-bold text-newspaper-900 mb-6 flex items-center">
-                <Star className="w-6 h-6 mr-2" />
-                Destacados del día
-              </h2>
+      <div className="newspaper-layout">
+        {/* Main Content Area */}
+        <div className="newspaper-main">
+          {/* Hero Article */}
+          {mainPost && (
+            <article className="newspaper-hero">
+              {mainPost.image && (
+                <div className="newspaper-hero-image">
+                  <img 
+                    src={mainPost.image} 
+                    alt=""
+                    className="newspaper-image"
+                  />
+                </div>
+              )}
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {featuredPosts.slice(0, 4).map((post) => (
-                  <article key={post.id} className="beat-post-card">
-                    {post.image && (
-                      <img 
-                        src={post.image} 
-                        alt="" 
-                        className="w-full h-48 object-cover beat-image-bw mb-4"
-                      />
-                    )}
-                    
-                    <Link to={`/post/${post.id}`}>
-                      <h3 className="beat-post-title">{post.title}</h3>
+              <div className="newspaper-hero-content">
+                <Link to={`/post/${mainPost.id}`}>
+                  <h1 className="newspaper-hero-title">
+                    {mainPost.title}
+                  </h1>
+                </Link>
+                
+                <p className="newspaper-hero-excerpt">
+                  {truncateContent(mainPost.content, 200)}
+                </p>
+                
+                <div className="newspaper-meta">
+                  <span className="newspaper-byline">
+                    By <Link to={`/beatnik/${mainPost.author_username}`} className="newspaper-author">
+                      {mainPost.author_username}
                     </Link>
-                    
-                    <div className="beat-post-meta">
-                      <Link 
-                        to={`/beatnik/${post.author_username}`}
-                        className="font-medium hover:text-newspaper-900"
-                      >
-                        {post.author_username}
-                      </Link>
-                      <span className="flex items-center">
-                        <Clock className="w-4 h-4 mr-1" />
-                        {formatDistanceToNow(new Date(post.created_at), { 
-                          addSuffix: true, 
-                          locale: es 
-                        })}
-                      </span>
-                    </div>
-                    
-                    <p className="beat-post-excerpt">
-                      {truncateContent(post.content, 150)}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {post.hashtags.map((tag) => (
-                        <Link
-                          key={tag}
-                          to={`/ranks?hashtag=${tag}`}
-                          className="beat-hashtag"
-                        >
-                          #{tag}
-                        </Link>
-                      ))}
-                    </div>
-                    
-                    <div className="beat-post-footer">
-                      <div className="flex items-center space-x-4 text-sm text-newspaper-600">
-                        <span className="flex items-center">
-                          <Eye className="w-4 h-4 mr-1" />
-                          {post.visits}
-                        </span>
-                        <span className="flex items-center">
-                          <Star className="w-4 h-4 mr-1" />
-                          {post.average_rating.toFixed(1)}
-                        </span>
-                        <span className="flex items-center">
-                          <MessageCircle className="w-4 h-4 mr-1" />
-                          {post.comments_count}
-                        </span>
-                      </div>
-                    </div>
-                  </article>
-                ))}
+                  </span>
+                  <div className="newspaper-stats">
+                    <span className="newspaper-stat">
+                      <Eye className="w-3 h-3" />
+                      {mainPost.visits}
+                    </span>
+                    <span className="newspaper-stat">
+                      <Star className="w-3 h-3" />
+                      {mainPost.average_rating.toFixed(1)}
+                    </span>
+                    <span className="newspaper-stat">
+                      <MessageCircle className="w-3 h-3" />
+                      {mainPost.comments_count}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </section>
+            </article>
           )}
 
-          {/* Recent Posts */}
-          <section>
-            <h2 className="text-2xl font-bold text-newspaper-900 mb-6 flex items-center">
-              <Clock className="w-6 h-6 mr-2" />
-              Publicaciones recientes
-            </h2>
-            
-            <div className="space-y-6">
-              {recentPosts.map((post) => (
-                <article key={post.id} className="beat-post-card">
-                  <div className="md:flex md:space-x-6">
-                    {post.image && (
-                      <div className="md:w-1/3 mb-4 md:mb-0">
-                        <img 
-                          src={post.image} 
-                          alt="" 
-                          className="w-full h-32 md:h-24 object-cover beat-image-bw"
-                        />
-                      </div>
-                    )}
-                    
-                    <div className={post.image ? "md:w-2/3" : "w-full"}>
-                      <Link to={`/post/${post.id}`}>
-                        <h3 className="beat-post-title text-lg">{post.title}</h3>
+          {/* Secondary Articles Grid */}
+          <div className="newspaper-grid">
+            {secondaryPosts.map((post) => (
+              <article key={post.id} className="newspaper-card">
+                {post.image && (
+                  <div className="newspaper-card-image">
+                    <img 
+                      src={post.image} 
+                      alt=""
+                      className="newspaper-image"
+                    />
+                  </div>
+                )}
+                
+                <div className="newspaper-card-content">
+                  <Link to={`/post/${post.id}`}>
+                    <h3 className="newspaper-card-title">
+                      {post.title}
+                    </h3>
+                  </Link>
+                  
+                  <p className="newspaper-card-excerpt">
+                    {truncateContent(post.content, 100)}
+                  </p>
+                  
+                  <div className="newspaper-card-meta">
+                    <span className="newspaper-byline-small">
+                      By <Link to={`/beatnik/${post.author_username}`} className="newspaper-author">
+                        {post.author_username}
                       </Link>
-                      
-                      <div className="beat-post-meta">
-                        <Link 
-                          to={`/beatnik/${post.author_username}`}
-                          className="font-medium hover:text-newspaper-900"
-                        >
-                          {post.author_username}
-                        </Link>
-                        <span className="flex items-center">
-                          <Clock className="w-4 h-4 mr-1" />
-                          {formatDistanceToNow(new Date(post.created_at), { 
-                            addSuffix: true, 
-                            locale: es 
-                          })}
-                        </span>
-                      </div>
-                      
-                      <p className="beat-post-excerpt text-sm">
-                        {truncateContent(post.content, 120)}
-                      </p>
-                      
-                      <div className="flex items-center justify-between mt-3">
-                        <div className="flex flex-wrap gap-1">
-                          {post.hashtags.slice(0, 2).map((tag) => (
-                            <Link
-                              key={tag}
-                              to={`/ranks?hashtag=${tag}`}
-                              className="beat-hashtag text-xs"
-                            >
-                              #{tag}
-                            </Link>
-                          ))}
-                        </div>
-                        
-                        <div className="flex items-center space-x-3 text-xs text-newspaper-600">
-                          <span className="flex items-center">
-                            <Eye className="w-3 h-3 mr-1" />
-                            {post.visits}
-                          </span>
-                          <span className="flex items-center">
-                            <Star className="w-3 h-3 mr-1" />
-                            {post.average_rating.toFixed(1)}
-                          </span>
-                          <span className="flex items-center">
-                            <MessageCircle className="w-3 h-3 mr-1" />
-                            {post.comments_count}
-                          </span>
-                        </div>
-                      </div>
+                    </span>
+                    <div className="newspaper-stats-small">
+                      <span className="newspaper-stat">
+                        <Eye className="w-3 h-3" />
+                        {post.visits}
+                      </span>
+                      <span className="newspaper-stat">
+                        <Star className="w-3 h-3" />
+                        {post.average_rating.toFixed(1)}
+                      </span>
                     </div>
                   </div>
-                </article>
-              ))}
-            </div>
-          </section>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* Bottom Articles */}
+          <div className="newspaper-bottom">
+            {bottomPosts.map((post) => (
+              <article key={post.id} className="newspaper-bottom-card">
+                {post.image && (
+                  <div className="newspaper-bottom-image">
+                    <img 
+                      src={post.image} 
+                      alt=""
+                      className="newspaper-image"
+                    />
+                  </div>
+                )}
+                
+                <div className="newspaper-bottom-content">
+                  <Link to={`/post/${post.id}`}>
+                    <h4 className="newspaper-bottom-title">
+                      {post.title}
+                    </h4>
+                  </Link>
+                  
+                  <p className="newspaper-bottom-excerpt">
+                    {truncateContent(post.content, 80)}
+                  </p>
+                  
+                  <div className="newspaper-bottom-meta">
+                    <span className="newspaper-byline-small">
+                      By <Link to={`/beatnik/${post.author_username}`} className="newspaper-author">
+                        {post.author_username}
+                      </Link>
+                    </span>
+                    <div className="newspaper-stats-small">
+                      <span className="newspaper-stat">
+                        <Eye className="w-3 h-3" />
+                        {post.visits}
+                      </span>
+                      <span className="newspaper-stat">
+                        <Star className="w-3 h-3" />
+                        {post.average_rating.toFixed(1)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-8">
-          {/* Popular Hashtags */}
-          <div className="beat-card p-6">
-            <h3 className="text-lg font-semibold text-newspaper-900 mb-4 flex items-center">
-              <Hash className="w-5 h-5 mr-2" />
-              Hashtags populares
-            </h3>
+        <aside className="newspaper-sidebar">
+          <div className="newspaper-ranking">
+            <h2 className="newspaper-ranking-title">Top Ranking</h2>
             
-            <div className="space-y-2">
-              {popularHashtags.slice(0, 10).map((item) => (
-                <Link
-                  key={item.hashtag}
-                  to={`/ranks?hashtag=${item.hashtag}`}
-                  className="flex items-center justify-between py-2 px-3 hover:bg-newspaper-100 transition-colors"
-                >
-                  <span className="text-sm font-medium">#{item.hashtag}</span>
-                  <span className="text-xs text-newspaper-600 bg-newspaper-200 px-2 py-1 rounded-full">
-                    {item.count}
-                  </span>
-                </Link>
+            <div className="newspaper-ranking-list">
+              {recentPosts.slice(0, 3).map((post, index) => (
+                <div key={post.id} className="newspaper-ranking-item">
+                  <div className="newspaper-ranking-number">
+                    {index + 1}
+                  </div>
+                  
+                  <div className="newspaper-ranking-content">
+                    <Link to={`/post/${post.id}`}>
+                      <h4 className="newspaper-ranking-item-title">
+                        {post.title}
+                      </h4>
+                    </Link>
+                    
+                    <p className="newspaper-ranking-excerpt">
+                      {truncateContent(post.content, 60)}
+                    </p>
+                    
+                    <div className="newspaper-ranking-meta">
+                      <span className="newspaper-byline-tiny">
+                        By <Link to={`/beatnik/${post.author_username}`} className="newspaper-author">
+                          {post.author_username}
+                        </Link>
+                      </span>
+                      <div className="newspaper-stats-tiny">
+                        <span className="newspaper-stat">
+                          <Star className="w-2 h-2" />
+                          {post.average_rating.toFixed(1)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
+        </aside>
+      </div>
 
-          {/* About */}
-          <div className="beat-card p-6">
-            <h3 className="text-lg font-semibold text-newspaper-900 mb-4">
-              Sobre Beatpost
-            </h3>
-            <div className="text-sm text-newspaper-700 space-y-3">
-              <p>
-                Una plataforma de publicación abierta inspirada en la estética 
-                y el espíritu de la Beat Generation.
-              </p>
-              <p>
-                Aquí, los artículos hablan por sí solos: sin vídeos, sin pop-ups, 
-                sin ruido. Solo contenido de calidad.
-              </p>
-              <div className="beat-quote">
-                "No compite en velocidad ni en viralidad. Compite en profundidad, 
-                estilo y autenticidad."
-              </div>
-            </div>
+      {/* Footer */}
+      <div className="newspaper-footer">
+        <div className="newspaper-footer-content">
+          <span>© 2024 Beatpost - All Rights Reserved</span>
+          <div className="newspaper-footer-links">
+            <Link to="/privacy">Privacy Policy</Link>
+            <Link to="/terms">Terms of Service</Link>
           </div>
         </div>
       </div>
